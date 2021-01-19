@@ -411,7 +411,10 @@ function! s:asym_filter(stash) abort "{{{
     elseif char ==# "\<CR>"
         call s:do_enter(a:stash)
         return
-    elseif char ==# ';'
+    elseif char ==# ';' && !g:eskk#disable_sticky_shift
+        if g:eskk#disable_sticky_shift
+            return
+        endif
         call s:do_sticky(a:stash)
         return
     elseif char ==# "\<C-g>"
@@ -639,7 +642,7 @@ function! s:do_backspace(stash) abort "{{{
         elseif preedit.get_marker(phase) !=# ''
             if !preedit.step_back_henkan_phase()
                 let msg = "Normal phase's marker is empty, "
-                            \       . 'and other phases *should* be able to change' 
+                            \       . 'and other phases *should* be able to change'
                             \       . 'current henkan phase.'
                 throw eskk#internal_error(['eskk', 'preedit'], msg)
             endif
@@ -1431,6 +1434,7 @@ function! eskk#_initialize() abort "{{{
     call eskk#util#set_default('g:eskk#kata_convert_to_hira_at_completion', 1)
     call eskk#util#set_default('g:eskk#show_annotation', 0)
     call eskk#util#set_default('g:eskk#kakutei_when_unique_candidate', 0)
+    call eskk#util#set_default('g:eskk#disable_sticky_shift', 0)
 
     " Mappings
     call eskk#util#set_default('g:eskk#mapped_keys', eskk#get_default_mapped_keys())
@@ -1523,7 +1527,7 @@ function! eskk#_initialize() abort "{{{
 
     EskkMap -type=kakutei <C-j>
 
-    EskkMap -type=sticky ;
+    "EskkMap -type=sticky ;
     EskkMap -type=general Q ;
     EskkMap -type=backspace-key <C-h>
     EskkMap -type=enter-key <CR>
@@ -1543,7 +1547,7 @@ function! eskk#_initialize() abort "{{{
     EskkMap -type=phase:henkan-select:prev-page x
 
     EskkMap -type=phase:henkan-select:escape <C-g>
-
+    
     EskkMap -type=phase:henkan-select:delete-from-dict X
 
     EskkMap -type=mode:hira:toggle-hankata <C-q>
