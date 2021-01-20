@@ -412,9 +412,6 @@ function! s:asym_filter(stash) abort "{{{
         call s:do_enter(a:stash)
         return
     elseif char ==# g:eskk#marker_henkan
-        "if g:eskk#disable_sticky_shift
-            "return
-        "endif
         call s:do_sticky(a:stash)
         return
     elseif char ==# "\<C-g>"
