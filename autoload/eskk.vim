@@ -1300,6 +1300,8 @@ function! s:asym_prefilter(stash) abort "{{{
     " 'L' is mode:{hira,kata,hankata}:to-zenei
     if char ==# 'X' || char ==# 'L'
         return [char]
+    elseif char ==# g:eskk#sticky_shift_key && !g:eskk#disable_sticky_shift
+        return [g:eskk#marker_henkan]
     elseif char =~# '^[A-Z]$'
         " Treat uppercase "A" in "SAkujo" as lowercase.
         "
@@ -1317,8 +1319,6 @@ function! s:asym_prefilter(stash) abort "{{{
         endif
     elseif char ==# "\<BS>"
         return ["\<C-h>"]
-    elseif char ==# g:eskk#sticky_shift_key && !g:eskk#disable_sticky_shift
-        return [g:eskk#marker_henkan]
     else
         return [char]
     endif
