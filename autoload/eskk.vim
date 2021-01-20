@@ -411,10 +411,10 @@ function! s:asym_filter(stash) abort "{{{
     elseif char ==# "\<CR>"
         call s:do_enter(a:stash)
         return
-    elseif char ==# ';' && !g:eskk#disable_sticky_shift
-        if g:eskk#disable_sticky_shift
-            return
-        endif
+    elseif char ==# g:eskk#marker_henkan
+        "if g:eskk#disable_sticky_shift
+            "return
+        "endif
         call s:do_sticky(a:stash)
         return
     elseif char ==# "\<C-g>"
@@ -1313,10 +1313,12 @@ function! s:asym_prefilter(stash) abort "{{{
         if !buf_str.rom_str.empty() && buf_str.rom_pairs.empty()
             return [tolower(char)]
         else
-            return [';', tolower(char)]
+            return [g:eskk#marker_henkan, tolower(char)]
         endif
     elseif char ==# "\<BS>"
         return ["\<C-h>"]
+    elseif char ==# g:eskk#sticky_shift_key && !g:eskk#disable_sticky_shift
+        return [g:eskk#marker_henkan]
     else
         return [char]
     endif
@@ -1438,6 +1440,7 @@ function! eskk#_initialize() abort "{{{
 
     " Mappings
     call eskk#util#set_default('g:eskk#mapped_keys', eskk#get_default_mapped_keys())
+    call eskk#util#set_default('g:eskk#sticky_shift_key', ';')
 
     " Mode
     call eskk#util#set_default('g:eskk#initial_mode', 'hira')
@@ -1527,7 +1530,7 @@ function! eskk#_initialize() abort "{{{
 
     EskkMap -type=kakutei <C-j>
 
-    "EskkMap -type=sticky ;
+    EskkMap -type=sticky ;
     EskkMap -type=general Q ;
     EskkMap -type=backspace-key <C-h>
     EskkMap -type=enter-key <CR>
