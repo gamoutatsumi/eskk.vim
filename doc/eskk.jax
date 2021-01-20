@@ -262,6 +262,15 @@ g:eskk#mapped_keys				*g:eskk#mapped_keys*
 	Note: この変数の値に"|"を含めたい場合、"<Bar>"と書く必要があることに気
 	を付けること。
 
+g:eskk#disable_sticky_shift			*g:eskk#disable_sticky_shift*
+							    (デフォルト値: 0)
+	|sticky-shift| を使用するかどうか。
+	Note: 設定されたキーは単独で入力する事ができなくなるので注意。
+
+g:eskk#sticky_shift_key				*g:eskk#sticky_shift_key*
+							    (デフォルト▽値: ";")
+	|sticky-shfit| で使用するキー。
+
 
 モードに関する変数
 -------
